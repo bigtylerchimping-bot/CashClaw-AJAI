@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CashClaw — AI-Powered Freelance Automation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111;
+      --border: #222;
+      --accent: #c8f542;
+      --accent2: #f5e642;
+      --text: #f0f0f0;
+      --muted: #666;
+      --mono: 'DM Mono', monospace;
+      --display: 'Syne', sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--display);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* GRID BACKGROUND */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,245,66,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,245,66,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(12px);
+    }
+
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .logo span { color: var(--accent); }
+
+    nav a {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.05em;
+      transition: color 0.2s;
+    }
+    nav a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 8rem 2.5rem 4rem;
+      max-width: 900px;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tag::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 7rem);
+      font-weight: 800;
+      line-height: 0.92;
+      letter-spacing: -0.04em;
+      margin-bottom: 2rem;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      font-family: var(--mono);
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 520px;
+      margin-bottom: 3rem;
+    }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--accent);
+      color: #0a0a0a;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 1.75rem;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .cta:hover {
+      background: var(--accent2);
+      transform: translateY(-2px);
+    }
+
+    /* SERVICES */
+    .section {
+      position: relative;
+      z-index: 1;
+      padding: 5rem 2.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 3rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .service-card {
+      background: var(--surface);
+      padding: 2rem;
+      transition: background 0.2s;
+    }
+
+    .service-card:hover { background: #161616; }
+
+    .service-icon {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* POLICIES */
+    .policy-block {
+      border: 1px solid var(--border);
+      padding: 2rem;
+      margin-bottom: 1rem;
+      background: var(--surface);
+    }
+
+    .policy-block h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      color: var(--accent);
+    }
+
+    .policy-block p {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* CONTACT */
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.5rem 2rem;
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+
+    .contact-row span {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .contact-row a {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 2rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    footer p {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.25rem; }
+      .hero { padding: 7rem 1.25rem 3rem; }
+      .section { padding: 3rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Cash<span>Claw</span></div>
+    <a href="mailto:contact@cashclaw.com">contact@cashclaw.com</a>
+  </nav>
+
+  <div class="hero">
+    <div class="tag">AI Freelance Automation</div>
+    <h1>Automated<br/>work.<br/><em>Real results.</em></h1>
+    <p class="hero-sub">CashClaw delivers AI-powered software services and freelance automation — helping clients get quality work done faster, at scale.</p>
+    <a class="cta" href="mailto:contact@cashclaw.com">Get in touch →</a>
+  </div>
+
+  <div class="section">
+    <div class="section-label">// Services</div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">⚙️</div>
+        <h3>Automation & Scripting</h3>
+        <p>Custom scripts and bots to automate repetitive workflows, data tasks, and business processes.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>AI Integration</h3>
+        <p>Integrate large language models and AI APIs into your existing tools and pipelines.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🛠️</div>
+        <h3>Software Development</h3>
+        <p>Web apps, backend services, and internal tools built to spec — fast turnaround, clean code.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3>Data & Analytics</h3>
+        <p>Dashboards, scrapers, and data pipelines that turn raw information into actionable insight.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">// Policies</div>
+
+    <div class="policy-block">
+      <h3>Refund Policy</h3>
+      <p>All services are delivered on a project or milestone basis. Refunds are available within 7 days of payment if work has not yet commenced. Once work has begun, partial refunds may be issued at our discretion based on work completed. Completed and delivered projects are non-refundable. To request a refund, contact us at contact@cashclaw.com.</p>
+    </div>
+
+    <div class="policy-block">
+      <h3>Privacy Policy</h3>
+      <p>CashClaw collects only the information necessary to deliver services — including name, email, and project details provided by clients. We do not sell or share your personal information with third parties. Payment processing is handled securely via Stripe; CashClaw does not store payment card information. We may use aggregate, anonymized data to improve our services. For questions about your data, contact us at contact@cashclaw.com.</p>
+    </div>
+
+    <div class="policy-block">
+      <h3>Terms of Service</h3>
+      <p>By engaging CashClaw for services, you agree that all work product delivered is for legitimate business use. CashClaw reserves the right to decline projects at its discretion. Payment terms are agreed upon before work begins. CashClaw is not liable for indirect or consequential damages arising from delivered work. These terms are governed by applicable law.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">// Contact</div>
+    <div class="contact-row">
+      <span>Email</span>
+      <a href="mailto:contact@cashclaw.com">contact@cashclaw.com</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2025 CashClaw. All rights reserved.</p>
+    <p>AI-powered software services.</p>
+  </footer>
+
+</body>
+</html>
